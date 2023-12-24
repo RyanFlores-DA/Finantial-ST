@@ -1,17 +1,17 @@
 // src/controllers/taskController.js
-const SetTaskService = require('../services/setTaskService');
+const SetCardService = require('../services/setCardService');
 const DbMiddleware = require('../middleware/dbMiddleware');
 
-class SetTaskController {
+class SetCardController {
   constructor() {
-    this.setTaskService = new SetTaskService();
+    this.setCardService = new SetCardService();
   }
 
-  async setTasks(req, res) {
+  async setCards(req, res) {
 
     try {
-      const tasks = await this.setTaskService.setTasks(req, res);
-      return res.json(tasks);
+      const cards = await this.setCardService.setCards(req, res);
+      return res.json(cards);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });

@@ -1,6 +1,6 @@
 const Database = require('../db')
 const crypto = require('crypto')
-class GetTaskService {
+class GetCardService {
   constructor() {
   }
   
@@ -19,7 +19,7 @@ class GetTaskService {
     return descriptografado;
   }
 
-  async getTasks(req, res) {
+  async getCards(req, res) {
     try {
       this.database = new Database();
       
@@ -35,4 +35,4 @@ class GetTaskService {
   }
 }
 
-module.exports = GetTaskService;
+module.exports = GetCardService;

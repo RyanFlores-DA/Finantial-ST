@@ -1,11 +1,11 @@
 const Database = require('../db')
 const crypto = require('crypto')
 require('dotenv').config();
-class SetTaskService {
+class SetCardService {
   constructor() {
   }
 
-  async setTasks(req, res) {
+  async setCards(req, res) {
     try {
       this.database = new Database();
       const input = req.query;
@@ -57,4 +57,4 @@ class SetTaskService {
   }
 }
 
-module.exports = SetTaskService;
+module.exports = SetCardService;

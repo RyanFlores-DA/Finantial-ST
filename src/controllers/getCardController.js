@@ -1,17 +1,17 @@
 // src/controllers/taskController.js
-const GetTaskService = require('../services/getTaskService');
+const GetCardkService = require('../services/getCardService');
 const DbMiddleware = require('../middleware/dbMiddleware');
 
-class TaskController {
+class CardController {
   constructor() {
-    this.getTaskService = new GetTaskService();
+    this.getCardService = new GetCardkService();
   }
 
   async getTasks(req, res) {
 
     try {
-      const tasks = await this.getTaskService.getTasks(req, res);
-      return res.json(tasks);
+      const cards = await this.getCardService.getCards(req, res);
+      return res.json(cards);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
@@ -19,4 +19,4 @@ class TaskController {
   }
 }
 
-module.exports = TaskController;
+module.exports = CardController;
