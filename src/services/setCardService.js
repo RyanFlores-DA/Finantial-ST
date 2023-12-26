@@ -50,7 +50,7 @@ class SetCardService {
       '${input.data}',
       '${chaveDeCriptografia}')`);
 
-      return result;
+      return result.rowCount;
     } catch (error) {
       throw error;
     }

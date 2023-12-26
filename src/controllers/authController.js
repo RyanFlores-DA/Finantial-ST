@@ -1,8 +1,8 @@
-// src/controllers/authController.js
 const { generateToken } = require('../jwt');
+require = ('dotenv/config');
 
 class AuthController {
-  async login(req, res, pool) { // Certifique-se de receber a pool como parâmetro
+  async login(req, res, pool) { 
     const { login, password } = req.body;
 
     try {
@@ -14,9 +14,9 @@ class AuthController {
 
       const user = result.rows[0];
       const tokenData = {
-        cli_host: '191.252.204.101',
+        cli_host: process.env.HOST,
         cli_user: user.cli_user,
-        port: 5432,
+        port: process.env.PORT,
         password: user.password,
         database: user.us_dbname,
       };

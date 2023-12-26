@@ -1,4 +1,3 @@
-// src/controllers/taskController.js
 const SetCardService = require('../services/setCardService');
 const DbMiddleware = require('../middleware/dbMiddleware');
 
@@ -19,4 +18,4 @@ class SetCardController {
   }
 }
 
-module.exports = SetTaskController;
+module.exports = SetCardController;

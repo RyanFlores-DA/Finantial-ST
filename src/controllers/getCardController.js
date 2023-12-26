@@ -1,4 +1,3 @@
-// src/controllers/taskController.js
 const GetCardkService = require('../services/getCardService');
 const DbMiddleware = require('../middleware/dbMiddleware');
 
@@ -7,7 +6,7 @@ class CardController {
     this.getCardService = new GetCardkService();
   }
 
-  async getTasks(req, res) {
+  async getCards(req, res) {
 
     try {
       const cards = await this.getCardService.getCards(req, res);

@@ -1,13 +1,13 @@
-// src/db.js
 const { Pool } = require('pg');
+require = ('dotenv/config');
 
 function createPublicPool() {
   return new Pool({
-    user: 'ryan',
-    host: '191.252.204.101',
-    database: 'control',
-    password: '1234',
-    port: 5432
+    user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD,
+    port: process.env.PORT
   });
 }
 

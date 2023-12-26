@@ -1,4 +1,3 @@
-// src/db.js
 const { Pool } = require('pg');
 class db{
   constructor(){
