@@ -1,15 +1,16 @@
 const { Pool } = require('pg');
+require = ('dotenv/config');
 class db{
   constructor(){
     
   }
 async createPool(user) {
   return new Pool({
-    user: 'ryan',
-    host: '191.252.204.101',
+    user: process.env.USUARIO,
+    host: process.env.HOST || 'localhost',
     database: `${user}`,
-    password: '1234',
-    port: 5432,
+    password: process.env.PASSWORD,
+    port: process.env.PORT || 3337,
   });
 }
 }

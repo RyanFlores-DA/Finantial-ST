@@ -14,10 +14,10 @@ class AuthController {
 
       const user = result.rows[0];
       const tokenData = {
-        cli_host: process.env.HOST,
-        cli_user: user.cli_user,
-        port: process.env.PORT,
-        password: user.password,
+        cli_host: process.env.HOST || 'localhost',
+        cli_user: process.env.USUARIO,
+        port: process.env.PORT || 3337,
+        password: process.env.PASSWORD,
         database: user.us_dbname,
       };
       const token = generateToken(tokenData);

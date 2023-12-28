@@ -3,11 +3,11 @@ require = ('dotenv/config');
 
 function createPublicPool() {
   return new Pool({
-    user: process.env.USER,
-    host: process.env.HOST,
+    user: process.env.USUARIO,
+    host: process.env.HOST || 'localhost',
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
-    port: process.env.PORT
+    port: process.env.PORT || 3337
   });
 }
 
