@@ -1,9 +1,9 @@
-const GetCardkService = require('../services/getCardService');
+const GetCardService = require('../services/getCardService');
 const DbMiddleware = require('../middleware/dbMiddleware');
 
 class CardController {
   constructor() {
-    this.getCardService = new GetCardkService();
+    this.getCardService = new GetCardService();
   }
 
   async getCards(req, res) {
