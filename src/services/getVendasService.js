@@ -34,30 +34,37 @@ class GetVendasService {
             let anoPlusOne = date.getFullYear();
             
             if ((date.getMonth() + 2) > 12) {
-                console.log('Virou o ano!');
                 mesPlusThirty = '01';
                 anoPlusOne = date.getFullYear() + 1;
             }else{
-                console.log('Normal!');
             }
             
             const fullDay = `${ano}-${mes}-${dia}`;
             const fullDayPlusThirty = `${anoPlusOne}-${mesPlusThirty}-${dia}`;
+
             const pool = await this.database.createPool(req.user.database);
             const client = await pool.connect();
-            console.log(client);
-            console.log(`SELECT * FROM vendas WHERE fin_dt_inicio BETWEEN '${fullDay}' AND '${fullDayPlusThirty}'`);
+
             const result = await client.query(`SELECT * FROM vendas WHERE fin_dt_inicio BETWEEN '${fullDay}' AND '${fullDayPlusThirty}'`);
             const resultados = await Promise.all(
                 result.rows.map(async x => {
                     const numeroCartao = await this.descriptografarDado(x.card_nm_iv, x.card_nm_cpt, x.card_nm_tag, x.card_key_secret);
 
-                    return { numeroCartao };
+                    return {
+                        "status": x.stt_descricao,
+                        "descricao": x.fin_descricao,
+                        "valor": x.fin_valor,
+                        "Cartão": `****${numeroCartao.substring(4)}`
+                    };
                 })
             );
 
+            if (resultados.length <= 0) {
+                return res.status(200).json('Nenhuma venda encontrada para esse periodo!');
+            }else{
+                return res.status(200).json(resultados);
+            }
 
-            return resultados;
         } catch (error) {
             throw error;
         }

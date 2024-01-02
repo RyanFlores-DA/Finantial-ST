@@ -10,7 +10,6 @@ class getVendasController {
 
     try {
       const vendas = await this.getVendasService.getVendas(req, res);
-    //   return res.json(vendas);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
