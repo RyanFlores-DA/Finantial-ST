@@ -53,8 +53,10 @@ class GetVendasService {
                     return {
                         "status": x.stt_descricao,
                         "descricao": x.fin_descricao,
+                        "data": x.data_venda,
+                        "banco": x.bank_descript,
                         "valor": x.fin_valor,
-                        "Cartão": `****${numeroCartao.substring(4)}`
+                        "cartao": `****${numeroCartao.substring(4)}`
                     };
                 })
             );
