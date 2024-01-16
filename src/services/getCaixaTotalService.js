@@ -1,20 +1,19 @@
 const Database = require("../db");
-class GetDespesasService {
+class GetCaixaTotalService {
   constructor() {}
-  async getDespesas(req, res) {
+  async getTotalCaixa(req, res) {
     let client;
     try {
       this.database = new Database();
 
-      const params = req.query;
       const pool = await this.database.createPool(req.user.database);
       client = await pool.connect();
 
       const resultados = await client.query(
-        `SELECT sum(despesa_valor)as valor_despesas FROM despesas WHERE despesa_ativa = 'S'`
+        `select sum(valor)as valor from vw_caixa` //MUDA PARA ENDPOINT EXCLUSIVO DE TOTAL DESPESA
       );
 
-      return resultados;
+      return resultados.rows;
     } catch (error) {
       throw error;
     } finally {
@@ -25,4 +24,4 @@ class GetDespesasService {
   }
 }
 
-module.exports = GetDespesasService;
+module.exports = GetCaixaTotalService;
