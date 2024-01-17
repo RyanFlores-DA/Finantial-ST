@@ -10,7 +10,7 @@ class GetCaixaTotalService {
       client = await pool.connect();
 
       const resultados = await client.query(
-        `select sum(valor)as valor from vw_caixa` //MUDA PARA ENDPOINT EXCLUSIVO DE TOTAL DESPESA
+        `select sum(valor)as valor from vw_caixa`
       );
 
       return resultados.rows;
