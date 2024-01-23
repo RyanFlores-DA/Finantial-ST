@@ -1,8 +1,9 @@
 const Database = require('../db')
-const crypto = require('crypto')
-require('dotenv').config();
+const CriptografarService = require('./criptografarDados')
+
 class SetCardService {
   constructor() {
+    this.criptografarService = new CriptografarService;
   }
 
   async setCards(req, res) {
@@ -12,24 +13,9 @@ class SetCardService {
       const pool = await this.database.createPool(req.user.database);
       const client = await pool.connect();
 
-      const chaveDeCriptografia = process.env.FULLCARD;
-      const iv = crypto.randomBytes(16);
+      const criptografado = await this.criptografarService.criptografarDadosCartao(input.numero, input.cvv);
 
 
-      const keyLength = 32; 
-      const paddedKey = Buffer.alloc(keyLength, chaveDeCriptografia, 'utf-8');
-
-
-
-      const cipherNumero = crypto.createCipheriv('aes-256-gcm', paddedKey, iv);
-      let criptografadoNumero = cipherNumero.update(input.numero, 'utf-8', 'hex');
-      criptografadoNumero += cipherNumero.final('hex');
-      const tagNumero = cipherNumero.getAuthTag();
-
-      const cipherCvv = crypto.createCipheriv('aes-256-gcm', paddedKey, iv);
-      let criptografadoCvv = cipherCvv.update(input.cvv, 'utf-8', 'hex');
-      criptografadoCvv += cipherCvv.final('hex');
-      const tagCvv = cipherCvv.getAuthTag();
       const result = await client.query(`insert into card (
         card_nm_cpt, 
         card_nm_iv, 
@@ -41,14 +27,14 @@ class SetCardService {
         card_primario,
         card_data_exp,
         card_key_secret) 
-        VALUES ('${criptografadoNumero}', '${iv.toString('hex')}', '${tagNumero.toString('hex')}',
+        VALUES ('${criptografado.criptografadoNumero}', '${criptografado.iv.toString('hex')}', '${criptografado.tagNumero.toString('hex')}',
       '${input.apelido}',
-      '${criptografadoCvv}', 
-      '${iv.toString('hex')}', 
-      '${tagCvv.toString('hex')}', 
+      '${criptografado.criptografadoCvv}', 
+      '${criptografado.iv.toString('hex')}', 
+      '${criptografado.tagCvv.toString('hex')}', 
       '${input.primario}', 
       '${input.data}',
-      '${chaveDeCriptografia}')`);
+      '${criptografado.chaveDeCriptografia}')`);
 
       return result.rowCount;
     } catch (error) {

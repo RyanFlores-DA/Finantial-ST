@@ -1,7 +1,7 @@
 const GetVendasService = require('../services/getVendasService');
 const DbMiddleware = require('../middleware/dbMiddleware');
 
-class getVendasController {
+class GetVendasController {
   constructor() {
     this.getVendasService = new GetVendasService();
   }
@@ -17,4 +17,4 @@ class getVendasController {
   }
 }
 
-module.exports = getVendasController;
+module.exports = GetVendasController;

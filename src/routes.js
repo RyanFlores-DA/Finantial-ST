@@ -7,6 +7,7 @@ const GetMetasController = require('./controllers/getMetasController');
 const GetAssinaturasController = require('./controllers/getAssinaturasController');
 const GetDespesasController = require('./controllers/getDespesasController');
 const GetCaixaTotalController = require('./controllers/getCaixaTotalController');
+const GetLineDashboardVendasController = require('./controllers/getLineDashboardVendasController');
 const { authenticateToken } = require('./middleware/authMiddleware');
 const dbMiddleware = require('./middleware/dbMiddleware');
 const createPool = require('./db');
@@ -22,6 +23,7 @@ const getMetasController = new GetMetasController();
 const getAssinaturasController = new GetAssinaturasController();
 const getDespesasController = new GetDespesasController();
 const getCaixaTotalController = new GetCaixaTotalController();
+const getLineDashboardVendasController = new GetLineDashboardVendasController();
 
 router.post('/login', (req, res) => authController.login(req, res)); 
 router.get('/cards', authenticateToken, (req, res) => getCardController.getCards(req, res));
@@ -31,5 +33,6 @@ router.get('/metas', authenticateToken, (req, res) => getMetasController.getMeta
 router.get('/assinaturas', authenticateToken, (req, res) => getAssinaturasController.getMetas(req, res));
 router.get('/despesas', authenticateToken, (req, res, next) => getDespesasController.getMetas(req, res, next));
 router.get('/totalCaixa', authenticateToken, (req, res, next) => getCaixaTotalController.getTotalCaixa(req, res, next));
+router.get('/dashboard/vendas', authenticateToken, (req, res, next) => getLineDashboardVendasController.lineDashboardVendasController(req, res, next));
 
 module.exports = router;

@@ -1,24 +1,9 @@
 const Database = require('../db')
-const crypto = require('crypto')
+const DescriptografarService = require('./descriptografarService');
+
 class GetVendasService {
     constructor() {
-    }
-
-    async descriptografarDado(iv, criptografado, tag, chave) {
-        return new Promise((resolve, reject) => {
-            const chaveDeCriptografia = chave;
-            const keyLength = 32;
-            const paddedKey = Buffer.alloc(keyLength, chaveDeCriptografia, 'utf-8');
-            const decipher = crypto.createDecipheriv('aes-256-gcm', paddedKey, Buffer.from(iv, 'hex'));
-
-            decipher.setAuthTag(Buffer.from(tag, 'hex'));
-
-            let descriptografado = decipher.update(criptografado, 'hex', 'utf-8');
-
-            descriptografado += decipher.final('utf-8');
-
-            resolve(descriptografado);
-        });
+        this.descriptografarDado = new DescriptografarService;
     }
 
     async getVendas(req, res) {
@@ -38,7 +23,6 @@ class GetVendasService {
                 anoPlusOne = date.getFullYear() + 1;
             }else{
             }
-            
             const fullDay = `${ano}-${mes}-${dia}`;
             const fullDayPlusThirty = `${anoPlusOne}-${mesPlusThirty}-${dia}`;
 
@@ -48,7 +32,7 @@ class GetVendasService {
             const result = await client.query(`SELECT * FROM vendas WHERE fin_dt_inicio BETWEEN '${fullDay}' AND '${fullDayPlusThirty}'`);
             const resultados = await Promise.all(
                 result.rows.map(async x => {
-                    const numeroCartao = await this.descriptografarDado(x.card_nm_iv, x.card_nm_cpt, x.card_nm_tag, x.card_key_secret);
+                    const numeroCartao = await this.descriptografarDado.descriptografarDado(x.card_nm_iv, x.card_nm_cpt, x.card_nm_tag, x.card_key_secret);
 
                     return {
                         "status": x.stt_descricao,
