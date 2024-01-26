@@ -6,10 +6,11 @@ class AuthService {
     }
 
     async getAuth(req, res) {
+        let client;
         try {
             const { login, password } = req.query;
             const result = await this.pool.query('SELECT login, us_dbname FROM users WHERE login = $1 AND pass = $2', [login, password]);
-
+            client = await this.pool.connect();
             if (result.rows.length === 0) {
                 return res.status(401).json({ message: 'Credenciais inválidas' });
             }
@@ -30,7 +31,11 @@ class AuthService {
 
         } catch (error) {
             throw error;
-        }
+        } finally {
+            if (client) {
+              client.release();
+            }
+          }
     }
 }
 

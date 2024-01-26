@@ -9,8 +9,7 @@ class GetLineDashboardVendasService {
       const pool = await this.database.createPool(req.user.database);
       client = await pool.connect();
       const parametros = req.query;
-      let repositorio = 
-        `
+      let repositorio = `
             SELECT
             CASE
             WHEN
@@ -29,8 +28,7 @@ class GetLineDashboardVendasService {
             END AS label,
             EXTRACT(MONTH FROM fin_dt_inicio) AS ordenador,
             SUM(fin_valor) AS total_valor
-            FROM vendas `
-      ;
+            FROM vendas `;
       let filtros = [];
 
       switch (parametros.mes) {
@@ -64,8 +62,7 @@ class GetLineDashboardVendasService {
             filtros = [parametros.data_inicio, parametros.data_final];
           } else {
             //QUERY COM DATAS
-            repositorio = 
-              `
+            repositorio = `
                     SELECT 
                     to_char(fin_dt_inicio, 'DD/MM/YYYY') as label,
                     SUM(fin_valor) AS total_valor
@@ -74,7 +71,7 @@ class GetLineDashboardVendasService {
                     GROUP BY fin_dt_inicio
                     ORDER BY fin_dt_inicio
                     `;
-            
+
             filtros = [parametros.data_inicio, parametros.data_final];
           }
           break;
@@ -87,9 +84,13 @@ class GetLineDashboardVendasService {
           break;
       }
       const resultado = await pool.query(repositorio, filtros);
-      return {"dataSets":resultado.rows};
+      return { dataSets: resultado.rows };
     } catch (error) {
       console.log(error);
+    } finally {
+      if (client) {
+        client.release();
+      }
     }
   }
 }
