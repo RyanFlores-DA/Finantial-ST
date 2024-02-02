@@ -18,7 +18,7 @@ class AuthService {
             const tokenData = {
                 cli_host: process.env.HOST || 'localhost',
                 cli_user: process.env.USUARIO,
-                port: process.env.PORT || 3337,
+                port: process.env.PORT || 5006,
                 password: process.env.PASSWORD,
                 database: user.us_dbname,
             };

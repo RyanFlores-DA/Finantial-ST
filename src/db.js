@@ -10,7 +10,7 @@ async createPool(user) {
     host: process.env.HOST || 'localhost',
     database: `${user}`,
     password: process.env.PASSWORD,
-    port: process.env.PORT || 3337,
+    port: process.env.PORT || 5006,
   });
 }
 }
