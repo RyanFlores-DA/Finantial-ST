@@ -8,7 +8,7 @@ class AuthService {
     async getAuth(req, res) {
         let client;
         try {
-            const { login, password } = req.query;
+            const { login, password } = req.body;
             const result = await this.pool.query('SELECT login, us_dbname FROM users WHERE login = $1 AND pass = $2', [login, password]);
             client = await this.pool.connect();
             if (result.rows.length === 0) {
