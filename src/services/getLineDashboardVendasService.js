@@ -1,5 +1,4 @@
 const Database = require("../db");
-
 class GetLineDashboardVendasService {
   constructor() {}
   async lineDashboardVendasService(req, res) {
@@ -36,14 +35,16 @@ class GetLineDashboardVendasService {
           repositorio += `
                 WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '3 months'
                 GROUP BY fin_dt_inicio
-                ORDER BY fin_dt_inicio
+                ORDER BY fin_dt_inicio DESC
+                LIMIT 3
                 `;
           break;
         case "6":
           repositorio += `
                 WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '6 months'
                 GROUP BY fin_dt_inicio
-                ORDER BY fin_dt_inicio
+                ORDER BY fin_dt_inicio DESC
+                LIMIT 6
                 `;
           break;
         case "P":
