@@ -41,7 +41,7 @@ class GetLineDashboardVendasService {
           break;
         case "6":
           repositorio += `
-                WHERE fin_dt_inicio >= date_trunc('MONTH', CURRENT_DATE) - INTERVAL '6 months'
+                WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '6 months'
                 GROUP BY fin_dt_inicio
                 ORDER BY fin_dt_inicio DESC
                 LIMIT 6
