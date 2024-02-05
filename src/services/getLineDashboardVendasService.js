@@ -1,4 +1,5 @@
 const Database = require("../db");
+const ObterUltimosMesesService = require('./oberUltimosMesesService');
 
 class GetLineDashboardVendasService {
   constructor() {}
@@ -7,6 +8,10 @@ class GetLineDashboardVendasService {
     try {
       this.database = new Database();
       const pool = await this.database.createPool(req.user.database);
+      const obterUltimosMesesService = new ObterUltimosMesesService;
+
+      const meses = await obterUltimosMesesService.obterUltimosMeses();
+
       client = await pool.connect();
       const parametros = req.query;
       let repositorio = `
@@ -34,14 +39,16 @@ class GetLineDashboardVendasService {
       switch (parametros.mes) {
         case "3":
           repositorio += `
-                WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '3 months'
+                --WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '3 months'
+                WHERE fin_dt_inicio in ${meses}
                 GROUP BY fin_dt_inicio
                 ORDER BY fin_dt_inicio
+                LIMIT 3
                 `;
           break;
         case "6":
           repositorio += `
-                WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '6 months'
+                WHERE fin_dt_inicio >= date_trunc('MONTH', CURRENT_DATE) - INTERVAL '6 months'
                 GROUP BY fin_dt_inicio
                 ORDER BY fin_dt_inicio
                 `;
