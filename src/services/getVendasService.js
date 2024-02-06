@@ -46,7 +46,12 @@ class GetVendasService {
             );
 
             if (resultados.length <= 0) {
-                return res.status(200).json('Nenhuma venda encontrada para esse periodo!');
+                return res.status(200).json([{
+                    'descricao':'Nenhuma venda encontrada para esse periodo!',
+                    'banco': 0,
+                    'data': 0,
+                    'valor': 0
+                }]);
             }else{
                 return res.status(200).json(resultados);
             }
