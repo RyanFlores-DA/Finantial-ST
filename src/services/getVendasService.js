@@ -36,7 +36,9 @@ class GetVendasService {
 
                     return {
                         "status": x.stt_descricao,
+                        "cor": x.stt_cor,
                         "descricao": x.fin_descricao,
+                        "tipo": x.tipo_descricao,
                         "data": x.data_venda,
                         "banco": x.bank_descript,
                         "valor": x.fin_valor,
