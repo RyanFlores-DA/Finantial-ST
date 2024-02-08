@@ -13,28 +13,28 @@ class GetVendasService {
             
             const date = new Date();
             const dia = '01';
-            const mes = date.getMonth() +1;
+            let mes = date.getMonth() +1;
             let mesPlusThirty = date.getMonth() + 2;
             let ano = date.getFullYear();
             let anoPlusOne = date.getFullYear();
             
             if ((date.getMonth() + 2) > 12) {
-                mesPlusThirty = '01';
+                mesPlusThirty = '1';
                 anoPlusOne = date.getFullYear() + 1;
-            }else{
             }
             const fullDay = `${ano}-${mes}-${dia}`;
             const fullDayPlusThirty = `${anoPlusOne}-${mesPlusThirty}-${dia}`;
 
             const pool = await this.database.createPool(req.user.database);
             const client = await pool.connect();
-
             const result = await client.query(`SELECT * FROM vendas WHERE fin_dt_inicio BETWEEN '${fullDay}' AND '${fullDayPlusThirty}'`);
+
             const resultados = await Promise.all(
                 result.rows.map(async x => {
                     const numeroCartao = await this.descriptografarDado.descriptografarDado(x.card_nm_iv, x.card_nm_cpt, x.card_nm_tag, x.card_key_secret);
 
                     return {
+                        "id": x.fin_id,
                         "status": x.stt_descricao,
                         "cor": x.stt_cor,
                         "descricao": x.fin_descricao,
