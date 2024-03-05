@@ -12,20 +12,20 @@ class GetLineDashboardVendasService {
             SELECT
             CASE
             WHEN
-              (EXTRACT(MONTH FROM fin_dt_inicio)) = 1 THEN 'Janeiro'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 2 THEN 'Fevereiro'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 3 THEN 'Março'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 4 THEN 'Abril'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 5 THEN 'Maio'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 6 THEN 'Junho'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 7 THEN 'Julho'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 8 THEN 'Agosto'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 9 THEN 'Setembro'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 10 THEN 'Outubro'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 11 THEN 'Novembro'
-              WHEN (EXTRACT(MONTH FROM fin_dt_inicio)) = 12 THEN 'Dezembro'
+              (EXTRACT(MONTH FROM fin_dt_venda)) = 1 THEN 'Janeiro'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 2 THEN 'Fevereiro'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 3 THEN 'Março'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 4 THEN 'Abril'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 5 THEN 'Maio'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 6 THEN 'Junho'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 7 THEN 'Julho'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 8 THEN 'Agosto'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 9 THEN 'Setembro'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 10 THEN 'Outubro'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 11 THEN 'Novembro'
+              WHEN (EXTRACT(MONTH FROM fin_dt_venda)) = 12 THEN 'Dezembro'
             END AS label,
-            EXTRACT(MONTH FROM fin_dt_inicio) AS ordenador,
+            EXTRACT(MONTH FROM fin_dt_venda) AS ordenador,
             SUM(fin_valor) AS total_valor
             FROM vendas `;
       let filtros = [];
@@ -33,17 +33,17 @@ class GetLineDashboardVendasService {
       switch (parametros.mes) {
         case "3":
           repositorio += `
-                WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '3 months'
-                GROUP BY fin_dt_inicio
-                ORDER BY fin_dt_inicio DESC
+                WHERE fin_dt_venda >= CURRENT_DATE - INTERVAL '3 months'
+                GROUP BY (EXTRACT(MONTH FROM fin_dt_venda))
+                ORDER BY fin_dt_venda DESC
                 LIMIT 3
                 `;
           break;
         case "6":
           repositorio += `
-                WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '6 months'
-                GROUP BY fin_dt_inicio
-                ORDER BY fin_dt_inicio DESC
+                WHERE fin_dt_venda >= CURRENT_DATE - INTERVAL '6 months'
+                GROUP BY (EXTRACT(MONTH FROM fin_dt_venda))
+                ORDER BY fin_dt_venda DESC
                 LIMIT 6
                 `;
           break;
@@ -56,21 +56,21 @@ class GetLineDashboardVendasService {
           ) {
             //QUERY COM OS MESES
             repositorio += `
-                WHERE fin_dt_inicio between $1 AND $2
-                GROUP BY fin_dt_inicio
-                ORDER BY fin_dt_inicio
+                WHERE fin_dt_venda between $1 AND $2
+                GROUP BY (EXTRACT(MONTH FROM fin_dt_venda))
+                ORDER BY fin_dt_venda
                 `;
             filtros = [parametros.data_inicio, parametros.data_final];
           } else {
             //QUERY COM DATAS
             repositorio = `
                     SELECT 
-                    to_char(fin_dt_inicio, 'DD/MM/YYYY') as label,
+                    to_char(fin_dt_venda, 'DD/MM/YYYY') as label,
                     SUM(fin_valor) AS total_valor
                     FROM vendas 
-                    WHERE fin_dt_inicio between $1 AND $2
-                    GROUP BY fin_dt_inicio
-                    ORDER BY fin_dt_inicio
+                    WHERE fin_dt_venda between $1 AND $2
+                    GROUP BY (EXTRACT(MONTH FROM fin_dt_venda))
+                    ORDER BY fin_dt_venda
                     `;
 
             filtros = [parametros.data_inicio, parametros.data_final];
@@ -78,9 +78,9 @@ class GetLineDashboardVendasService {
           break;
         default:
           repositorio += `
-                WHERE fin_dt_inicio >= CURRENT_DATE - INTERVAL '3 months'
-                GROUP BY fin_dt_inicio
-                ORDER BY fin_dt_inicio
+                WHERE fin_dt_venda >= CURRENT_DATE - INTERVAL '3 months'
+                GROUP BY (EXTRACT(MONTH FROM fin_dt_venda))
+                ORDER BY fin_dt_venda
                 `;
           break;
       }

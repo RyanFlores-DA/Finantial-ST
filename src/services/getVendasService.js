@@ -27,7 +27,7 @@ class GetVendasService {
 
             const pool = await this.database.createPool(req.user.database);
             const client = await pool.connect();
-            const result = await client.query(`SELECT * FROM vendas WHERE fin_dt_inicio BETWEEN '${fullDay}' AND '${fullDayPlusThirty}'`);
+            const result = await client.query(`SELECT * FROM vendas WHERE fin_dt_parcela BETWEEN '${fullDay}' AND '${fullDayPlusThirty}'`);
 
             const resultados = await Promise.all(
                 result.rows.map(async x => {
@@ -42,6 +42,8 @@ class GetVendasService {
                         "data": x.data_venda,
                         "banco": x.bank_descript,
                         "valor": x.fin_valor,
+                        "parcela": x.parcela,
+                        "maxparcela": x.maxparcela,
                         "cartao": `****${numeroCartao.substring(4)}`
                     };
                 })
