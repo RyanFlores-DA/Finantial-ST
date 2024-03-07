@@ -22,12 +22,11 @@ class GetVendasService {
                 mesPlusThirty = '1';
                 anoPlusOne = date.getFullYear() + 1;
             }
-            const fullDay = `${ano}-${mes}-${dia}`;
-            const fullDayPlusThirty = `${anoPlusOne}-${mesPlusThirty}-${dia}`;
-
+            const fullDay = `${ano}-${mes}-`;
+            const fullDayPlusThirty = `${anoPlusOne}-${mesPlusThirty}-`;
             const pool = await this.database.createPool(req.user.database);
             const client = await pool.connect();
-            const result = await client.query(`SELECT * FROM vendas WHERE fin_dt_parcela BETWEEN '${fullDay}' AND '${fullDayPlusThirty}'`);
+            const result = await client.query(`SELECT * FROM vendas v JOIN meu_banco mb on (mb.mb_id = v.id_meu_banco) WHERE fin_dt_parcela BETWEEN (('${fullDay}'||mb.mb_dia_fatura)::date) AND (('${fullDayPlusThirty}'||mb.mb_dia_fatura)::date)`);
 
             const resultados = await Promise.all(
                 result.rows.map(async x => {
