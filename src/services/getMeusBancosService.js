@@ -1,8 +1,8 @@
 const Database = require("../db");
 const crypto = require("crypto");
-class GetAssinaturasService {
+class GetMeusBancosService {
   constructor() {}
-  async getAssinaturas(req, res) {
+  async getMeusBancos(req, res) {
     let client;
     try {
       this.database = new Database();
@@ -11,7 +11,8 @@ class GetAssinaturasService {
       const pool = await this.database.createPool(req.user.database);
       client = await pool.connect();
 
-      const resultados = await client.query("select * from vw_assinaturas");
+      const resultados = await client.query("select m.mb_id as id, b.bank_descript as descricao from meu_banco m inner join dim_bank b on (b.id = m.mb_fk_bank) WHERE mb_ativo = 'S' ");
+
       return resultados.rows;
     } catch (error) {
       throw error;
@@ -23,4 +24,4 @@ class GetAssinaturasService {
   }
 }
 
-module.exports = GetAssinaturasService;
+module.exports = GetMeusBancosService;

@@ -1,8 +1,8 @@
 const Database = require("../db");
 const crypto = require("crypto");
-class GetAssinaturasService {
+class GetResumoCartoesService {
   constructor() {}
-  async getAssinaturas(req, res) {
+  async getResumoCartoes(req, res) {
     let client;
     try {
       this.database = new Database();
@@ -11,7 +11,8 @@ class GetAssinaturasService {
       const pool = await this.database.createPool(req.user.database);
       client = await pool.connect();
 
-      const resultados = await client.query("select * from vw_assinaturas");
+      const resultados = await client.query("select * from gera_resumo()");
+
       return resultados.rows;
     } catch (error) {
       throw error;
@@ -23,4 +24,4 @@ class GetAssinaturasService {
   }
 }
 
-module.exports = GetAssinaturasService;
+module.exports = GetResumoCartoesService;

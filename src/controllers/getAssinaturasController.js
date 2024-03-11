@@ -1,5 +1,5 @@
-const GetAssinaturasService = require('../services/getAssinaturasService');
-const DbMiddleware = require('../middleware/dbMiddleware');
+const GetAssinaturasService = require("../services/getAssinaturasService");
+const DbMiddleware = require("../middleware/dbMiddleware");
 
 class GetAssinaturasController {
   constructor() {
@@ -7,12 +7,16 @@ class GetAssinaturasController {
   }
 
   async getMetas(req, res) {
-
     try {
-      await this.getAssinaturasService.getAssinaturas(req, res);
+      const resultado = await this.getAssinaturasService.getAssinaturas(
+        req,
+        res
+      );
+
+      res.status(200).json(resultado);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: 'Erro interno do servidor' });
+      return res.status(500).json({ message: "Erro interno do servidor" });
     }
   }
 }
