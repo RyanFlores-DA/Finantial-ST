@@ -38,6 +38,20 @@ class PostVendasService {
                         mes
                     ]);
                 }
+            }else{
+                response = await client.query(`INSERT INTO financas (fin_descricao, fin_dt_venda, fin_fk_tipo, fin_fk_card, fin_fk_plano, fin_fk_banco, fin_valor, fin_dt_parcela, fin_parcela, fin_fk_mes) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`, [
+                        parametros.descricao,
+                        parametros.dataVenda,
+                        parametros.tipo,
+                        parametros.cartao,
+                        0,
+                        parametros.banco,
+                        parametros.valor,
+                        parcelas[i],
+                        1,
+                        mes
+                    ]);
             }
 
             return   {"mensagem": `${response.rowCount} vendas inseridas`} ;
