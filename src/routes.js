@@ -11,6 +11,7 @@ const GetLineDashboardVendasController = require('./controllers/getLineDashboard
 const PutAtualizaVendasController = require('./controllers/putAtualizaVendasController');
 const GetResumoCartoesController = require('./controllers/getResumoCartoesController');
 const PostVendasController = require('./controllers/postVendasController');
+const GetMeusBancosController = require('./controllers/getMeusBancosController');
 const { authenticateToken } = require('./middleware/authMiddleware');
 const dbMiddleware = require('./middleware/dbMiddleware');
 const createPool = require('./db');
@@ -30,6 +31,7 @@ const getLineDashboardVendasController = new GetLineDashboardVendasController();
 const putAtualizaVendasController = new PutAtualizaVendasController();
 const getResumoCartoesController = new GetResumoCartoesController();
 const postVendasController = new PostVendasController();
+const getMeusBancosController = new GetMeusBancosController();
 
 router.post('/login', (req, res) => authController.login(req, res)); 
 router.get('/cards', authenticateToken, (req, res) => getCardController.getCards(req, res));
@@ -42,6 +44,7 @@ router.get('/totalCaixa', authenticateToken, (req, res, next) => getCaixaTotalCo
 router.get('/dashboard/vendas', authenticateToken, (req, res, next) => getLineDashboardVendasController.lineDashboardVendasController(req, res, next));
 router.put('/atualizar/vendas', authenticateToken, (req, res, next) => putAtualizaVendasController.atualizaVendas(req, res, next));
 router.get('/resumo/cartoes', authenticateToken, (req, res, next) => getResumoCartoesController.getResumoCartoes(req, res, next));
-router.get('/inserir/vendas', authenticateToken, (req, res, next) => postVendasController.inserirVendas(req, res, next));
+router.post('/inserir/vendas', authenticateToken, (req, res, next) => postVendasController.inserirVendas(req, res, next));
+router.get('/meusbancos', authenticateToken, (req, res, next) => getMeusBancosController.getMeusBancos(req, res, next));
 
 module.exports = router;
