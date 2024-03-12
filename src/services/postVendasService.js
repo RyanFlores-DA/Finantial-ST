@@ -49,7 +49,7 @@ class PostVendasService {
                         0,
                         parametros.banco,
                         parametros.valor,
-                        parcelas[0],
+                        parametros.dataVenda,
                         0,
                         mes
                     ]);
