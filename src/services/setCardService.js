@@ -15,7 +15,6 @@ class SetCardService {
 
       const criptografado = await this.criptografarService.criptografarDadosCartao(input.numero, input.cvv);
 
-
       const result = await client.query(`insert into card (
         card_nm_cpt, 
         card_nm_iv, 
