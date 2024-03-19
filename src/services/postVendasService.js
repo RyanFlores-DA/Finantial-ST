@@ -69,7 +69,7 @@ class PostVendasService {
       }
       return {
         status: `ok`,
-        mensagem: `${response.rowCount} vendas inseridas`,
+        mensagem: `Venda inserida`,
       };
     } catch (error) {
       return {

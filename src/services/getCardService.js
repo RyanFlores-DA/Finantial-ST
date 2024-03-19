@@ -41,11 +41,10 @@ class GetCardService {
           repository = `SELECT * FROM vw_card where card_primario = 'N'`;
           break;
         default:
-          repository = `SELECT * FROM vw_card where card_primario = 'N'`;
+          repository = `SELECT * FROM vw_card where card_ativo = 'S'`;
           break;
       }
       const result = await client.query(repository);
-      console.log(process.env.FULLCARD);
       const resultados = await Promise.all(
         result.rows.map(async (x) => {
           const numeroCartao = await this.descriptografarDado(
