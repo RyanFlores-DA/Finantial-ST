@@ -48,7 +48,7 @@ class PostVendasService {
       } else {
 
         let cartao;
-        parametros.natureza == 1 ? cartao = parametros.cartao : cartao = 0;
+        parametros.natureza == 1 ? cartao = 0 : parametros.cartao;
         response = await client.query(
           `INSERT INTO financas (fin_descricao, fin_dt_venda, fin_fk_tipo, fin_fk_card, fin_fk_plano, fin_fk_banco, fin_valor, fin_dt_parcela, fin_parcela, fin_fk_mes, fin_fk_natureza, fin_fk_status) 
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 2)`,
@@ -75,6 +75,7 @@ class PostVendasService {
       return {
         status: `Error`,
         mensagem: `Erro ao inserir vendas`,
+        error: error
       };
     } finally {
       if (client) {
