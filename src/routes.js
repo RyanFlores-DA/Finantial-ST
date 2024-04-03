@@ -12,6 +12,7 @@ const PutAtualizaVendasController = require('./controllers/putAtualizaVendasCont
 const GetResumoCartoesController = require('./controllers/getResumoCartoesController');
 const PostVendasController = require('./controllers/postVendasController');
 const GetMeusBancosController = require('./controllers/getMeusBancosController');
+const PostDespesasController = require('./controllers/postDespesasController');
 const { authenticateToken } = require('./middleware/authMiddleware');
 const dbMiddleware = require('./middleware/dbMiddleware');
 const createPool = require('./db');
@@ -32,6 +33,7 @@ const putAtualizaVendasController = new PutAtualizaVendasController();
 const getResumoCartoesController = new GetResumoCartoesController();
 const postVendasController = new PostVendasController();
 const getMeusBancosController = new GetMeusBancosController();
+const postDespesasController = new PostDespesasController();
 
 router.post('/login', (req, res) => authController.login(req, res)); 
 router.get('/cards', authenticateToken, (req, res) => getCardController.getCards(req, res));
@@ -46,5 +48,6 @@ router.put('/atualizar/vendas', authenticateToken, (req, res, next) => putAtuali
 router.get('/resumo/cartoes', authenticateToken, (req, res, next) => getResumoCartoesController.getResumoCartoes(req, res, next));
 router.post('/inserir/vendas', authenticateToken, (req, res, next) => postVendasController.inserirVendas(req, res, next));
 router.get('/meusbancos', authenticateToken, (req, res, next) => getMeusBancosController.getMeusBancos(req, res, next));
+router.post('/inserir/despesa', authenticateToken, (req, res, next) => postDespesasController.inserirDespesas(req, res, next));
 
 module.exports = router;

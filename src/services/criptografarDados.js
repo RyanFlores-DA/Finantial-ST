@@ -25,7 +25,7 @@ class CriptografarService{
         criptografadoCvv += cipherCvv.final('hex');
         const tagCvv = cipherCvv.getAuthTag();
 
-        return {criptografadoNumero, tagNumero, criptografadoCvv, tagCvv, iv};
+        return {criptografadoNumero, tagNumero, criptografadoCvv, tagCvv, iv, chaveDeCriptografia};
     }
 }
 

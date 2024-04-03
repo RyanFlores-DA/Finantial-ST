@@ -37,8 +37,11 @@ class GetCardService {
         case "S":
           repository = `SELECT * FROM vw_card where card_primario = 'S'`;
           break;
-        default:
+        case "N":
           repository = `SELECT * FROM vw_card where card_primario = 'N'`;
+          break;
+        default:
+          repository = `SELECT * FROM vw_card where card_ativo = 'S'`;
           break;
       }
       const result = await client.query(repository);
@@ -58,7 +61,9 @@ class GetCardService {
           );
           const nome = x.card_apelido;
           const data = x.card_data_exp;
+          const id = x.card_id;
           return {
+            id: id,
             numero: `************${numeroCartao.substring(12)}`,
             nome: nome,
             data: data,

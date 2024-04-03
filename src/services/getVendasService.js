@@ -26,7 +26,7 @@ class GetVendasService {
             const fullDayPlusThirty = `${anoPlusOne}-${mesPlusThirty}-`;
             const pool = await this.database.createPool(req.user.database);
             const client = await pool.connect();
-            const result = await client.query(`SELECT * FROM vendas v JOIN meu_banco mb on (mb.mb_id = v.id_meu_banco) WHERE fin_dt_parcela BETWEEN (('${fullDay}'||mb.mb_dia_fatura)::date) AND (('${fullDayPlusThirty}'||mb.mb_dia_fatura)::date)`);
+            const result = await client.query(`SELECT * FROM vendas v JOIN meu_banco mb on (mb.mb_id = v.id_meu_banco) WHERE fin_dt_parcela BETWEEN (('${fullDay}'||mb.mb_dia_fatura)::date) AND (('${fullDayPlusThirty}'||(mb.mb_dia_fatura))::date)`);
 
             const resultados = await Promise.all(
                 result.rows.map(async x => {
@@ -43,7 +43,8 @@ class GetVendasService {
                         "valor": x.fin_valor,
                         "parcela": x.parcela,
                         "maxparcela": x.maxparcela,
-                        "cartao": `****${numeroCartao.substring(4)}`
+                        "cartao": `****${numeroCartao.substring(4)}`,
+                        "valorParcela": x.fin_valor_parcela,
                     };
                 })
             );
