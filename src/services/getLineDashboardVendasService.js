@@ -12,7 +12,8 @@ class GetLineDashboardVendasService {
                 SELECT
                 m.mes as label,
                 m.mes_id as ordenador,
-                SUM(fin_valor) AS total_valor
+                SUM(fin_valor_parcela) AS total_valor,
+                v.fin_descricao
                 FROM vendas v 
                 INNER JOIN dim_mes m on(m.mes_id = v.fin_fk_mes) `;
       let filtros = [];
@@ -21,7 +22,7 @@ class GetLineDashboardVendasService {
         case "3":
           repositorio += `
                 WHERE fin_dt_venda >= CURRENT_DATE - INTERVAL '4 months'
-                GROUP BY m.mes, m.mes_id
+                GROUP BY m.mes, m.mes_id, fin_descricao
                 ORDER BY m.mes_reverso DESC, m.mes_id 
                 LIMIT 4
                 `;
@@ -29,7 +30,7 @@ class GetLineDashboardVendasService {
         case "6":
           repositorio += `
                 WHERE fin_dt_venda >= CURRENT_DATE - INTERVAL '6 months'
-                GROUP BY m.mes, m.mes_id
+                GROUP BY m.mes, m.mes_id, fin_descricao
                 ORDER BY m.mes_reverso DESC, m.mes_id 
                 LIMIT 6
                 `;
@@ -44,7 +45,7 @@ class GetLineDashboardVendasService {
             //QUERY COM OS MESES
             repositorio += `
                 WHERE fin_dt_venda between $1 AND $2
-                GROUP BY m.mes, m.mes_id
+                GROUP BY m.mes, m.mes_id, fin_descricao
                 ORDER BY m.mes_reverso DESC, m.mes_id 
                 `;
             filtros = [parametros.data_inicio, parametros.data_final];
@@ -53,11 +54,12 @@ class GetLineDashboardVendasService {
             repositorio = `
                     SELECT 
                     to_char(fin_dt_venda, 'DD/MM/YYYY') as label,
-                    SUM(fin_valor) AS total_valor
+                    SUM(fin_valor_parcela) AS total_valor,
+                    v.fin_descricao
                     FROM vendas
                     INNER JOIN dim_mes m on(m.mes_id = v.fin_fk_mes) 
                     WHERE fin_dt_venda between $1 AND $2
-                    GROUP BY m.mes, m.mes_id
+                    GROUP BY m.mes, m.mes_id, fin_descricao
                     ORDER BY m.mes_reverso DESC, m.mes_id 
                     `;
 
@@ -67,11 +69,12 @@ class GetLineDashboardVendasService {
         default:
           repositorio += `
                 WHERE fin_dt_venda >= CURRENT_DATE - INTERVAL '3 months'
-                GROUP BY m.mes, m.mes_id
+                GROUP BY m.mes, m.mes_id, fin_descricao
                 ORDER BY m.mes_reverso DESC, m.mes_id 
                 `;
           break;
       }
+      console.log(repositorio);
       const resultado = await pool.query(repositorio, filtros);
       return { dataSets: resultado.rows };
     } catch (error) {
