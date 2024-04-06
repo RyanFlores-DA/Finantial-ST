@@ -1,19 +1,23 @@
-const createPool = require('../db');
-require('dotenv').config();
+const Pool = require('pg');
+require("dotenv").config();
 
-function dbMiddleware(req) {
+async function dbMiddleware() {
+  // const dbConfig = {
+  //   user: process.env.USER,
+  //   host: process.env.HOST,
+  //   database: process.env.DATABASE,
+  //   password: process.env.PASS,
+  //   port: process.env.PORT || 5006,
+  // };
+  // const pool = createPool(dbConfig);
 
-  const dbConfig = {
-    user: 'ryan',
-    host: '191.252.204.101',
-    database: `${req.user.database}`,
+  return new Pool({
+    user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
     password: process.env.PASS,
-    port: 5432,
-  };
-  const pool = createPool(dbConfig);
-
-  return req.pool = pool;
-
+    port: process.env.PORT || 5006,
+  });
 }
 
-module.exports = dbMiddleware;
+module.exports = { dbMiddleware };
