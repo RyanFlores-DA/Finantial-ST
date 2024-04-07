@@ -9,7 +9,7 @@ async function createConnectionByAccessKey(apiAccessKey) {
     const dbMiddleware = new DatabaseMiddleware();
     const pool = await dbMiddleware.dbMiddleware();
     const result = await pool.query(
-      "SELECT login, us_dbname FROM users WHERE token = $1 and id = 2",
+      "SELECT login, us_dbname FROM users WHERE token = $1",
       [apiAccessKey]
     );
     client = await pool.connect();
