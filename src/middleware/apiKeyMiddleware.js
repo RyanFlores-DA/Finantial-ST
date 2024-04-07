@@ -1,15 +1,18 @@
 const { generateToken } = require("../jwt");
 require("dotenv").config();
-const {dbMiddleware} = require("./dbMiddleware");
+const DatabaseMiddleware = require("./dbMiddleware");
 
 async function createConnectionByAccessKey(apiAccessKey) {
   let client;
   try {
-    const result = await dbMiddleware.query(
-      "SELECT login, us_dbname FROM users WHERE token = ",
+
+    const dbMiddleware = new DatabaseMiddleware();
+    const pool = await dbMiddleware.dbMiddleware();
+    const result = await pool.query(
+      "SELECT login, us_dbname FROM users WHERE token = $1 and id = 2",
       [apiAccessKey]
     );
-    client = await dbMiddleware.connect();
+    client = await pool.connect();
     if (result.rows.length === 0) {
       return { status: "error", message: "Chave de Api inválida", token: null };
     }

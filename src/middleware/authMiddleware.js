@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 // require = "dotenv/config";
 const { createConnectionByAccessKey } = require("./apiKeyMiddleware");
 
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
   const token = req.header("Authorization");
   const accessKey = req.header("ApiAccessKey");
 
@@ -11,10 +11,8 @@ function authenticateToken(req, res, next) {
   }
 
   if (accessKey) {
-    console.log(accessKey);
-    const apiKeyJwt = createConnectionByAccessKey(accessKey);
-    console.log(apiKeyJwt);
-    jwt.verify(apiKeyJwt, process.env.JWT_SECRET, (err, user) => {
+    const apiKeyJwt = await createConnectionByAccessKey(accessKey);
+    jwt.verify(apiKeyJwt['token'], process.env.JWT_SECRET, (err, user) => {
       if (err) {
         return res.status(403).json({ message: "Autenticação inválida" });
       }
