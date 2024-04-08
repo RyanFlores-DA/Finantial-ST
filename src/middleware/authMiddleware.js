@@ -11,14 +11,14 @@ async function authenticateToken(req, res, next) {
   }
 
   if (accessKey) {
-    const apiKeyJwt = await createConnectionByAccessKey(accessKey);
-    jwt.verify(apiKeyJwt['token'], process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.status(403).json({ message: "Autenticação inválida" });
-      }
-      req.user = user;
+    const apiKeyReturn = await createConnectionByAccessKey(accessKey);
+    if(apiKeyReturn['dbname'] != null){
+      req.user = {database: apiKeyReturn['dbname']};
       next();
-    });
+    }else{
+      return res.status(403).json({ message: apiKeyReturn['message'] });
+    }
+
   } else {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
