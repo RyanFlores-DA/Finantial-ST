@@ -56,15 +56,15 @@ class PostVendasService {
           [
             parametros.descricao,
             parametros.dataVenda,
-            parametros.tipo,
+            parseInt(parametros.tipo, 10),
             cartao,
             0,
-            parametros.banco,
+            parseInt(parametros.banco, 10), 
             parametros.valor,
             parametros.dataVenda,
             0,
             mes,
-            parametros.natureza,
+            parseInt(parametros.natureza, 10),
             parametros.valor
           ]
         );
