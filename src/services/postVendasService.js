@@ -77,7 +77,8 @@ class PostVendasService {
       return {
         status: `Error`,
         mensagem: `Erro ao inserir vendas`,
-        error: error
+        error: error,
+        parametros: req.body
       };
     } finally {
       if (client) {
