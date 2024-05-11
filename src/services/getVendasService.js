@@ -7,9 +7,12 @@ class GetVendasService {
     }
 
     async getVendas(req, res) {
+        let client;
         try {
 
             this.database = new Database();
+            const pool = await this.database.createPool(req.user.database);
+            client = await pool.connect();
             
             const date = new Date();
             const dia = '01';
@@ -24,10 +27,53 @@ class GetVendasService {
             }
             const fullDay = `${ano}-${mes}-`;
             const fullDayPlusThirty = `${anoPlusOne}-${mesPlusThirty}-`;
-            const pool = await this.database.createPool(req.user.database);
-            const client = await pool.connect();
-            const result = await client.query(`SELECT * FROM vendas v JOIN meu_banco mb on (mb.mb_id = v.id_meu_banco) WHERE fin_dt_parcela BETWEEN (('${fullDay}'||mb.mb_dia_fatura)::date) AND (('${fullDayPlusThirty}'||(mb.mb_dia_fatura))::date)`);
-
+            // const pool = await this.database.createPool(req.user.database);
+            // const client = await pool.connect();
+            const result = await client.query(`
+            SELECT 
+            fin_id,
+            stt_descricao,
+            stt_cor,
+            fin_descricao,
+            tipo_descricao,
+            data_venda,
+            bank_descript,
+            parcela,
+            maxparcela,
+            fin_valor_parcela,
+            card_nm_iv,
+            card_nm_cpt,
+            card_nm_tag,
+            card_key_secret
+            FROM vendas v 
+            JOIN meu_banco mb on (mb.mb_id = v.id_meu_banco) 
+            WHERE 
+            fin_dt_parcela BETWEEN (('${fullDay}'||mb.mb_dia_fatura)::date) 
+            AND (('${fullDayPlusThirty}'||(mb.mb_dia_fatura))::date)
+            AND fin_fk_plano <> 0
+            UNION
+            SELECT 
+            fin_id,
+            stt_descricao,
+            stt_cor,
+            fin_descricao,
+            tipo_descricao,
+            data_venda,
+            bank_descript,
+            parcela,
+            maxparcela,
+            fin_valor_parcela,
+            card_nm_iv,
+            card_nm_cpt,
+            card_nm_tag,
+            card_key_secret
+            FROM vendas v 
+            JOIN meu_banco mb on (mb.mb_id = v.id_meu_banco) 
+            WHERE
+            fin_fk_plano = 0
+            AND fin_dt_parcela BETWEEN (('${fullDay}'||'01')::date) 
+            AND (('${fullDayPlusThirty}'||'01')::date)
+            `);
             const resultados = await Promise.all(
                 result.rows.map(async x => {
                     const numeroCartao = await this.descriptografarDado.descriptografarDado(x.card_nm_iv, x.card_nm_cpt, x.card_nm_tag, x.card_key_secret);
@@ -60,8 +106,10 @@ class GetVendasService {
                 return res.status(200).json(resultados);
             }
 
-        } catch (error) {
-            throw error;
+        }finally {
+            if (client) {
+              client.release();
+            }
         }
     }
 }
