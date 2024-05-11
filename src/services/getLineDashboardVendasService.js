@@ -74,7 +74,6 @@ class GetLineDashboardVendasService {
                 `;
           break;
       }
-      console.log(repositorio);
       const resultado = await pool.query(repositorio, filtros);
       return { dataSets: resultado.rows };
     } catch (error) {
